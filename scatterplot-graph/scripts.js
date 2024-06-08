@@ -16,7 +16,17 @@ fetch(
       .domain([
         d3.min(data, (d) => Math.floor(d.Seconds / 60)),
         d3.max(data, (d) => Math.floor(d.Seconds / 60)),
-      ]);
+      ])
+      .range([h - padding, padding]);
     const svg = d3.select("body").append("svg").attr("width", w).attr("height", h);
 
+    svg
+      .selectAll("circle")
+      .data(data)
+      .enter()
+      .append("circle")
+      .attr("cx", (d) => xScale(d.Year))
+      .attr("cy", (d) => yScale(Math.floor(d.Seconds / 60)))
+      .attr("r", 4);
+  })
   .catch((err) => console.log(err));
