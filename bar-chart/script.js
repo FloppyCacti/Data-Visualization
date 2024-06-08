@@ -1,6 +1,4 @@
-fetch(
-  "https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/master/GDP-data.json"
-)
+fetch("https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/master/GDP-data.json")
   .then((response) => response.json())
   .then((data) => {
     const w = 1300;
@@ -18,11 +16,7 @@ fetch(
       .domain([0, d3.max(dataset, (d) => d[1])])
       .range([h - padding, padding]);
 
-    const svg = d3
-      .select("body")
-      .append("svg")
-      .attr("width", w)
-      .attr("height", h);
+    const svg = d3.select("body").append("svg").attr("width", w).attr("height", h);
 
     svg
       .selectAll("rect")
@@ -39,36 +33,16 @@ fetch(
       .attr("fill", "blue")
       .on("mouseover", (evt, d) => {
         const [mx, my] = d3.pointer(evt);
-        var months = [
-          "Jan",
-          "Feb",
-          "Mar",
-          "Apr",
-          "May",
-          "June",
-          "July",
-          "Aug",
-          "Sep",
-          "Oct",
-          "Nov",
-          "Dec",
-        ];
-        const text = `date: ${
-          months[d[0].getMonth()]
-        } ${d[0].getUTCFullYear()}\n GDP: ${d[1]}`;
+        var months = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const text = `date: ${months[d[0].getMonth()]} ${d[0].getUTCFullYear()}\n GDP: ${d[1]}`;
         tooltip
-          .attr("transform", `translate(${mx}, ${my})`)
-          .selectAll("tspan")
-          .data(text.split("\n"))
-          .join("tspan")
-          .attr("dy", "1em")
-          .attr("x", "0px")
-          .text((text) => text)
-          .attr("data-date", d[0])
+          .html(text)
+          .style("left", `${evt.pageX}px`)
+          .style("top", `${evt.pageY - 60}px`)
           .style("visibility", "visible");
       })
       .on("mouseout", () => {
-        tooltip.text("").style("visibility", "hidden");
+        tooltip.style("visibility", "hidden");
       });
 
     const xAxis = d3.axisBottom(xScale);
@@ -86,11 +60,6 @@ fetch(
       .attr("transform", "translate(" + padding + ", 0)")
       .call(yAxis);
 
-    const tooltip = svg
-      .append("text")
-      .attr("id", "tooltip")
-      .attr("fill", "black")
-      .style("pointer-events", "none")
-      .style("visibility", "hidden");
+    const tooltip = d3.select("#tooltip").append("text").attr("id", "tooltip").attr("fill", "black").style("visibility", "hidden");
   })
   .catch((error) => console.error(error));

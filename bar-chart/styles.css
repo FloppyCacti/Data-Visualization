@@ -5,3 +5,14 @@
 svg {
   background-color: antiquewhite;
 }
+
+#tooltip {
+  width: 120px;
+  position: absolute;
+  background: lightcyan; /* Set the background color here */
+  border-radius: 2px;
+  padding: 5px;
+  font: sans-serif 12pt;
+  pointer-events: none;
+  visibility: hidden;
+}
