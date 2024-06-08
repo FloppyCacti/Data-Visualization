@@ -3,12 +3,16 @@ fetch(
 )
   .then((response) => response.json())
   .then((data) => {
-    const w = 1380;
+    const w = 1000;
     const h = 200;
     const padding = 40;
     const bar_width = 4;
 
     const dataset = data.data;
+    const scale = d3
+      .scaleLinear()
+      .domain([0, d3.max(dataset, (d) => d[0])])
+      .range([padding, w - padding]);
 
     const svg = d3
       .select("body")
