@@ -9,11 +9,14 @@ fetch(
 
     const xScale = d3
       .scaleTime()
-      .domain([d3.min(data.Year), d3.max(data.Year)])
+      .domain([d3.min(data, (d) => d.Year), d3.max(data, (d) => d.Year)])
       .range([padding, w - padding]);
     const yScale = d3
       .scaleTime()
-      .domain([d3.min(Math.floor(data.Seconds / 60)), d3.max(Math.floor(data.Seconds / 60))]);
+      .domain([
+        d3.min(data, (d) => Math.floor(d.Seconds / 60)),
+        d3.max(data, (d) => Math.floor(d.Seconds / 60)),
+      ]);
     const svg = d3.select("body").append("svg").attr("width", w).attr("height", h);
-  })
+
   .catch((err) => console.log(err));
