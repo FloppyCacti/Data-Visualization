@@ -17,13 +17,13 @@ fetch("https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/maste
       .range([h - padding, padding]);
 
     const svg = d3.select("body").append("svg").attr("width", w).attr("height", h);
-
+    const tooltip = d3.select("#tooltip");
     svg
       .selectAll("rect")
       .data(dataset)
       .enter()
       .append("rect")
-      .attr("data-date", (d) => d[0])
+      .attr("data-date", (d, i) => data.data[i][0])
       .attr("data-gdp", (d) => d[1])
       .attr("class", "bar")
       .attr("width", bar_width)
@@ -34,11 +34,12 @@ fetch("https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/maste
       .on("mouseover", (evt, d) => {
         const [mx, my] = d3.pointer(evt);
         var months = ["Jan", "Feb", "Mar", "Apr", "May", "June", "July", "Aug", "Sep", "Oct", "Nov", "Dec"];
-        const text = `date: ${months[d[0].getMonth()]} ${d[0].getUTCFullYear()}\n GDP: ${d[1]}`;
+        const text = `Date: ${months[d[0].getUTCMonth()]} ${d[0].getUTCFullYear()}\n GDP: ${d[1]}`;
         tooltip
+          .attr("data-date", `${d[0].getUTCFullYear()}-${(d[0].getUTCMonth() + 1).toString().padStart(2, "0")}-${d[0].getUTCDate().toString().padStart(2, "0")}`)
           .html(text)
           .style("left", `${evt.pageX}px`)
-          .style("top", `${evt.pageY - 60}px`)
+          .style("top", `${evt.pageY}px`)
           .style("visibility", "visible");
       })
       .on("mouseout", () => {
@@ -59,7 +60,5 @@ fetch("https://raw.githubusercontent.com/FreeCodeCamp/ProjectReferenceData/maste
       .attr("id", "y-axis")
       .attr("transform", "translate(" + padding + ", 0)")
       .call(yAxis);
-
-    const tooltip = d3.select("#tooltip").append("text").attr("id", "tooltip").attr("fill", "black").style("visibility", "hidden");
   })
   .catch((error) => console.error(error));
