@@ -9,10 +9,14 @@ fetch(
     const bar_width = 4;
 
     const dataset = data.data;
-    const scale = d3
+    const xScale = d3
       .scaleLinear()
       .domain([0, d3.max(dataset, (d) => d[0])])
       .range([padding, w - padding]);
+    const yScale = d3
+      .scaleLinear()
+      .domain([0, d3.max(dataset, (d) => d[1])])
+      .range([h - padding, padding]);
 
     const svg = d3
       .select("body")
