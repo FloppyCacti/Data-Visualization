@@ -3,15 +3,15 @@ fetch(
 )
   .then((response) => response.json())
   .then((data) => {
-    const w = 1000;
-    const h = 200;
-    const padding = 40;
-    const bar_width = 4;
+    const w = 1200;
+    const h = 500;
+    const padding = 30;
+    const bar_width = 3;
 
     const dataset = data.data;
     const xScale = d3
       .scaleLinear()
-      .domain([0, d3.max(dataset, (d) => d[0])])
+      .domain([d3.min(dataset, (d) => d[0]), d3.max(dataset, (d) => d[0])])
       .range([padding, w - padding]);
     const yScale = d3
       .scaleLinear()
@@ -30,11 +30,9 @@ fetch(
       .enter()
       .append("rect")
       .attr("width", bar_width)
-      .attr("height", 100)
-      .attr("x", (d, i) => {
-        return i * (bar_width + 1);
-      })
-      .attr("y", 0)
+      .attr("height", (d) => yScale(0) - yScale(d[1]))
+      .attr("x", (d, i) => i * (bar_width + 1) + padding)
+      .attr("y", (d) => yScale(d[1]))
       .attr("fill", "blue");
   })
   .catch((error) => console.error(error));
