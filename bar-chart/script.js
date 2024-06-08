@@ -3,14 +3,14 @@ fetch(
 )
   .then((response) => response.json())
   .then((data) => {
-    const w = 1200;
+    const w = 1300;
     const h = 500;
-    const padding = 30;
+    const padding = 50;
     const bar_width = 3;
 
-    const dataset = data.data;
+    const dataset = data.data.map((d) => [new Date(d[0]), d[1]]);
     const xScale = d3
-      .scaleLinear()
+      .scaleTime()
       .domain([d3.min(dataset, (d) => d[0]), d3.max(dataset, (d) => d[0])])
       .range([padding, w - padding]);
     const yScale = d3
@@ -29,10 +29,68 @@ fetch(
       .data(dataset)
       .enter()
       .append("rect")
+      .attr("data-date", (d) => d[0])
+      .attr("data-gdp", (d) => d[1])
+      .attr("class", "bar")
       .attr("width", bar_width)
       .attr("height", (d) => yScale(0) - yScale(d[1]))
-      .attr("x", (d, i) => i * (bar_width + 1) + padding)
+      .attr("x", (d) => xScale(d[0]))
       .attr("y", (d) => yScale(d[1]))
-      .attr("fill", "blue");
+      .attr("fill", "blue")
+      .on("mouseover", (evt, d) => {
+        const [mx, my] = d3.pointer(evt);
+        var months = [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "June",
+          "July",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ];
+        const text = `date: ${
+          months[d[0].getMonth()]
+        } ${d[0].getUTCFullYear()}\n GDP: ${d[1]}`;
+        tooltip
+          .attr("transform", `translate(${mx}, ${my})`)
+          .selectAll("tspan")
+          .data(text.split("\n"))
+          .join("tspan")
+          .attr("dy", "1em")
+          .attr("x", "0px")
+          .text((text) => text)
+          .attr("data-date", d[0])
+          .style("visibility", "visible");
+      })
+      .on("mouseout", () => {
+        tooltip.text("").style("visibility", "hidden");
+      });
+
+    const xAxis = d3.axisBottom(xScale);
+    const yAxis = d3.axisLeft(yScale);
+
+    svg
+      .append("g")
+      .attr("id", "x-axis")
+      .attr("transform", "translate(0, " + (h - padding) + ")")
+      .call(xAxis);
+
+    svg
+      .append("g")
+      .attr("id", "y-axis")
+      .attr("transform", "translate(" + padding + ", 0)")
+      .call(yAxis);
+
+    const tooltip = svg
+      .append("text")
+      .attr("id", "tooltip")
+      .attr("fill", "black")
+      .style("pointer-events", "none")
+      .style("visibility", "hidden");
   })
   .catch((error) => console.error(error));
