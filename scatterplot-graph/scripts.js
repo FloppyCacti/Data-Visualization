@@ -3,7 +3,7 @@ fetch(
 )
   .then((response) => response.json())
   .then((data) => {
-    const w = 1200;
+    const w = 1000;
     const h = 700;
     const padding = 50;
 
@@ -32,7 +32,7 @@ fetch(
       .append("circle")
       .attr("cx", (d) => xScale(d.Year))
       .attr("cy", (d) => yScale(d.Seconds))
-      .attr("r", 5);
+      .attr("r", 7);
 
     svg
       .append("g")
