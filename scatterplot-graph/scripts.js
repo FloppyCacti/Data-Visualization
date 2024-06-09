@@ -3,10 +3,18 @@ fetch(
 )
   .then((response) => response.json())
   .then((data) => {
+    data.forEach(function (d) {
+      d.Place = +d.Place;
+      var parsedTime = d.Time.split(":");
+      d.Time = new Date(1970, 0, 1, 0, parsedTime[0], parsedTime[1]);
+    });
+
     const w = 1000;
     const h = 700;
     const padding = 50;
     const radius = 7;
+
+    const timeDataSet = data.map((d) => [new Date(d.Time)]);
 
     // X and Y scales
     const xScale = d3
@@ -36,15 +44,15 @@ fetch(
     //Add circle for every element in data
     svg
       .selectAll("circle")
-      .attr("class", "dot")
       .data(data)
       .enter()
       .append("circle")
+      .attr("class", "dot")
       .attr("cx", (d) => xScale(d.Year))
       .attr("cy", (d) => yScale(d.Seconds))
       .attr("r", radius)
       .attr("data-xvalue", (d, i) => data[i].Year)
-      .attr("data-yvalue", (d, i) => data[i].Time)
+      .attr("data-yvalue", (d) => d.Time.toISOString())
       .style("fill", (d, i) => {
         if (data[i].Doping == "") {
           return "GoldenRod";
