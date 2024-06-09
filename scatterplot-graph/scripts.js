@@ -8,17 +8,22 @@ fetch(
     const padding = 50;
 
     const xScale = d3
-      .scaleTime()
-      .domain([d3.min(data, (d) => d.Year), d3.max(data, (d) => d.Year)])
+      .scaleLinear()
+      .domain([d3.min(data, (d) => d.Year) - 1, d3.max(data, (d) => d.Year) + 1])
       .range([padding, w - padding]);
     const yScale = d3
       .scaleLinear()
-      .domain([d3.min(data, (d) => d.Seconds), d3.max(data, (d) => d.Seconds)])
-      .range([h - padding, padding]);
+      .domain([d3.min(data, (d) => d.Seconds) - 5, d3.max(data, (d) => d.Seconds) + 5])
+      .range([padding, h - padding]);
     const svg = d3.select("body").append("svg").attr("width", w).attr("height", h);
 
-    const xAxis = d3.axisBottom(xScale);
-    const yAxis = d3.axisLeft(yScale);
+    const xAxis = d3.axisBottom(xScale).tickFormat(d3.format(".0f"));
+    const yAxis = d3.axisLeft(yScale).tickFormat((d) => {
+      let minutes = Math.floor(d / 60);
+      let seconds = d % 60;
+      return minutes + ":" + seconds;
+    });
+    console.log(xScale(data[0].Year));
 
     svg
       .selectAll("circle")
@@ -26,7 +31,7 @@ fetch(
       .enter()
       .append("circle")
       .attr("cx", (d) => xScale(d.Year))
-      .attr("cy", (d) => h - yScale(d.Seconds))
+      .attr("cy", (d) => yScale(d.Seconds))
       .attr("r", 5);
 
     svg
