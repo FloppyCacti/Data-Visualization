@@ -30,6 +30,9 @@ fetch(
       return minutes + ":" + seconds;
     });
 
+    //tool-tip
+    const tooltip = d3.select("#tooltip");
+
     //Add circle for every element in data
     svg
       .selectAll("circle")
@@ -48,7 +51,19 @@ fetch(
         }
         return "steelblue";
       })
-      .style("stroke", "black");
+      .style("stroke", "black")
+      .on("mouseover", (evt, d) => {
+        const [mx, my] = d3.pointer(evt);
+        const text = `${d.Name}: ${d.Nationality}<br/>Year: ${d.Year}, Time: ${d.Time} ${
+          d.Doping ? "<br/><br/>" + d.Doping : ""
+        }`;
+        tooltip
+          .html(text)
+          .style("left", `${evt.pageX}px`)
+          .style("top", `${evt.pageY}px`)
+          .style("visibility", "visible");
+      })
+      .on("mouseout", () => tooltip.style("visibility", "hidden"));
 
     //Add X axis
     svg
