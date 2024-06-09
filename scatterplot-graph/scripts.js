@@ -8,6 +8,7 @@ fetch(
     const padding = 50;
     const radius = 7;
 
+    // X and Y scales
     const xScale = d3
       .scaleLinear()
       .domain([d3.min(data, (d) => d.Year) - 1, d3.max(data, (d) => d.Year) + 1])
@@ -16,8 +17,11 @@ fetch(
       .scaleLinear()
       .domain([d3.min(data, (d) => d.Seconds) - 5, d3.max(data, (d) => d.Seconds) + 5])
       .range([padding, h - padding]);
+
+    //Add svg which holds the graph
     const svg = d3.select("body").append("svg").attr("width", w).attr("height", h);
 
+    //x and y axis
     const xAxis = d3.axisBottom(xScale).tickFormat(d3.format(".0f"));
     const yAxis = d3.axisLeft(yScale).tickFormat((d) => {
       let minutes = Math.floor(d / 60);
@@ -25,8 +29,8 @@ fetch(
       seconds = String(seconds).padStart(2, "0");
       return minutes + ":" + seconds;
     });
-    console.log(xScale(data[0].Year));
 
+    //Add circle for every element in data
     svg
       .selectAll("circle")
       .attr("class", "dot")
@@ -46,18 +50,21 @@ fetch(
       })
       .style("stroke", "black");
 
+    //Add X axis
     svg
       .append("g")
       .attr("id", "x-axis")
       .attr("transform", "translate(0, " + (h - padding) + ")")
       .call(xAxis);
 
+    //Add Y axis
     svg
       .append("g")
       .attr("id", "y-axis")
       .attr("transform", "translate(" + padding + ", 0)")
       .call(yAxis);
 
+    //Code below is for legend
     const legendShapeSize = 17;
     svg
       .append("rect")
@@ -87,5 +94,6 @@ fetch(
       .attr("y", h - 623 + legendShapeSize)
       .text("Doping allegations")
       .style("font-size", "15px");
+    //legend ends here
   })
   .catch((err) => console.log(err));
