@@ -12,13 +12,13 @@ fetch(
       .domain([d3.min(data, (d) => d.Year), d3.max(data, (d) => d.Year)])
       .range([padding, w - padding]);
     const yScale = d3
-      .scaleTime()
-      .domain([
-        d3.min(data, (d) => Math.floor(d.Seconds / 60)),
-        d3.max(data, (d) => Math.floor(d.Seconds / 60)),
-      ])
+      .scaleLinear()
+      .domain([d3.min(data, (d) => d.Seconds), d3.max(data, (d) => d.Seconds)])
       .range([h - padding, padding]);
     const svg = d3.select("body").append("svg").attr("width", w).attr("height", h);
+
+    const xAxis = d3.axisBottom(xScale);
+    const yAxis = d3.axisLeft(yScale);
 
     svg
       .selectAll("circle")
@@ -26,7 +26,19 @@ fetch(
       .enter()
       .append("circle")
       .attr("cx", (d) => xScale(d.Year))
-      .attr("cy", (d) => yScale(Math.floor(d.Seconds / 60)))
-      .attr("r", 4);
+      .attr("cy", (d) => h - yScale(d.Seconds))
+      .attr("r", 5);
+
+    svg
+      .append("g")
+      .attr("id", "x-axis")
+      .attr("transform", "translate(0, " + (h - padding) + ")")
+      .call(xAxis);
+
+    svg
+      .append("g")
+      .attr("id", "y-axis")
+      .attr("transform", "translate(" + padding + ", 0)")
+      .call(yAxis);
   })
   .catch((err) => console.log(err));
