@@ -27,6 +27,7 @@ fetch(
 
     svg
       .selectAll("circle")
+      .attr("class", "dot")
       .data(data)
       .enter()
       .append("circle")
