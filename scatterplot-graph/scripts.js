@@ -59,6 +59,7 @@ fetch(
         }`;
         tooltip
           .html(text)
+          .attr("data-year", (d, i) => data[i].Year)
           .style("left", `${evt.pageX}px`)
           .style("top", `${evt.pageY}px`)
           .style("visibility", "visible");
