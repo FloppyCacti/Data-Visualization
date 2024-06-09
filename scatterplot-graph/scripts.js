@@ -32,7 +32,9 @@ fetch(
       .append("circle")
       .attr("cx", (d) => xScale(d.Year))
       .attr("cy", (d) => yScale(d.Seconds))
-      .attr("r", 7);
+      .attr("r", 7)
+      .style("fill", "steelblue")
+      .style("stroke", "black");
 
     svg
       .append("g")
