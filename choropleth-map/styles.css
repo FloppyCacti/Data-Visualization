@@ -19,3 +19,15 @@ h2 {
 #legend {
   background-color: aliceblue;
 }
+
+#tooltip {
+  font-size: 13px;
+  width: auto;
+  position: absolute;
+  background: lightcyan; /* Set the background color here */
+  border-radius: 2px;
+  padding: 5px;
+  font: sans-serif 12pt;
+  pointer-events: none;
+  visibility: hidden;
+}

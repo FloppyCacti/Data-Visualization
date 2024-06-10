@@ -5,6 +5,7 @@ const educationURL =
 
 const svg = d3.select("#map").attr("width", 1000).attr("height", 600);
 const legend = d3.select("#legend").attr("width", 300).attr("height", 100);
+const tooltip = d3.select("#tooltip");
 let countyData;
 let educationData;
 
@@ -51,12 +52,28 @@ d3.json(countyURL).then((data, error) => {
           })
           .attr("data-education", (d) => {
             let id = d.id;
-            let county = educationData.find((item) => {
-              return item.fips === id;
-            });
-
+            let county = educationData
+              .find((item) => {
+                return item.fips === id;
+              })
             return county.bachelorsOrHigher;
-          });
+          })
+          .on("mouseover", (evt, d) => {
+            const [mx, my] = d3.pointer(evt);
+            let id = d.id;
+            let county = educationData.find((item) => {
+                return item.fips === id;
+            });
+            const text = `${county.area_name}, ${county.state}: ${county.bachelorsOrHigher}%`;
+            tooltip
+                .html(text)
+                .style("left", `${evt.pageX}px`)
+                .style("top", `${evt.pageY}px`)
+                .style("visibility", "visible");
+              })
+          .on("mouseout", () => {
+                tooltip.style("visibility", "hidden");
+              });
       }
     });
   }
