@@ -2,12 +2,27 @@ d3.json(
   "https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/global-temperature.json"
 )
   .then((data) => {
+    const maxYear = d3.max(data.monthlyVariance, (d) => d.year);
+    const minYear = d3.min(data.monthlyVariance, (d) => d.year);
     const w = 1400;
     const h = 800;
     const padding = 60;
     const base = data.baseTemperature;
 
     const svg = d3.select("body").append("svg").attr("width", w).attr("height", h);
+
+    const parseYear = d3.timeParse("%Y");
+    const xScale = d3
+      .scaleTime()
+      .domain([
+        d3.min(data.monthlyVariance, (d) => parseYear(d.year)),
+        d3.max(data.monthlyVariance, (d) => parseYear(d.year)),
+      ])
+      .range([padding, w - padding]);
+    const yScale = d3
+      .scaleTime()
+      .domain([new Date(0, 0, 0, 0, 0, 0, 0), new Date(0, 12, 0, 0, 0, 0, 0)])
+      .range([padding, h - padding]);
 
     svg
       .selectAll("rect")
@@ -34,21 +49,13 @@ d3.json(
         } else {
           return "firebrick";
         }
-      });
+      })
+      .attr("height", (h - 2 * padding) / 12)
+      .attr("y", (d) => yScale(new Date(0, d.month - 1, 0, 0, 0, 0, 0)))
+      .attr("width", (w - 2 * padding) / (maxYear - minYear))
+      .attr("x", (d) => xScale(new Date(d.year, 0, 0, 0, 0, 0, 0)));
 
-    const parseYear = d3.timeParse("%Y");
-    const xScale = d3
-      .scaleTime()
-      .domain([
-        d3.min(data.monthlyVariance, (d) => parseYear(d.year)),
-        d3.max(data.monthlyVariance, (d) => parseYear(d.year)),
-      ])
-      .range([padding, w - padding]);
-    const yScale = d3
-      .scaleTime()
-      .domain([new Date(0, 0, 0, 0, 0, 0, 0), new Date(0, 12, 0, 0, 0, 0, 0)])
-      .range([padding, h - padding]);
-
+    // add x and y axis
     const xAxis = d3.axisBottom(xScale).tickFormat(d3.timeFormat("%Y"));
     const yAxis = d3.axisLeft(yScale);
 
