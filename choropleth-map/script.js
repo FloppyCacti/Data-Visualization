@@ -4,6 +4,7 @@ const educationURL =
   "https://cdn.freecodecamp.org/testable-projects-fcc/data/choropleth_map/for_user_education.json";
 
 const svg = d3.select("#map").attr("width", 1000).attr("height", 600);
+const legend = d3.select("#legend").attr("width", 300).attr("height", 100);
 let countyData;
 let educationData;
 
