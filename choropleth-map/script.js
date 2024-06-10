@@ -52,28 +52,28 @@ d3.json(countyURL).then((data, error) => {
           })
           .attr("data-education", (d) => {
             let id = d.id;
-            let county = educationData
-              .find((item) => {
-                return item.fips === id;
-              })
+            let county = educationData.find((item) => {
+              return item.fips === id;
+            });
             return county.bachelorsOrHigher;
           })
           .on("mouseover", (evt, d) => {
             const [mx, my] = d3.pointer(evt);
             let id = d.id;
             let county = educationData.find((item) => {
-                return item.fips === id;
+              return item.fips === id;
             });
             const text = `${county.area_name}, ${county.state}: ${county.bachelorsOrHigher}%`;
             tooltip
-                .html(text)
-                .style("left", `${evt.pageX}px`)
-                .style("top", `${evt.pageY}px`)
-                .style("visibility", "visible");
-              })
+              .attr("data-education", county.bachelorsOrHigher)
+              .html(text)
+              .style("left", `${evt.pageX}px`)
+              .style("top", `${evt.pageY}px`)
+              .style("visibility", "visible");
+          })
           .on("mouseout", () => {
-                tooltip.style("visibility", "hidden");
-              });
+            tooltip.style("visibility", "hidden");
+          });
       }
     });
   }
