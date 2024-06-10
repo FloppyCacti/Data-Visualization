@@ -4,7 +4,7 @@ d3.json(
   .then((data) => {
     const w = 1400;
     const h = 800;
-    const padding = 50;
+    const padding = 60;
     const base = data.baseTemperature;
 
     const svg = d3.select("body").append("svg").attr("width", w).attr("height", h);
@@ -15,7 +15,7 @@ d3.json(
       .enter()
       .append("rect")
       .attr("class", "cell")
-      .attr("data-month", (d) => d.month)
+      .attr("data-month", (d) => d.month - 1)
       .attr("data-year", (d) => d.year)
       .attr("data-temp", (d) => base + d.variance)
       .attr("fill", (d) => {
@@ -46,7 +46,8 @@ d3.json(
       .range([padding, w - padding]);
     const yScale = d3
       .scaleTime()
-      .range([new Date(0, 0, 0, 0, 0, 0, 0), new Date(0, 11, 0, 0, 0, 0, 0)]);
+      .domain([new Date(0, 0, 0, 0, 0, 0, 0), new Date(0, 12, 0, 0, 0, 0, 0)])
+      .range([padding, h - padding]);
 
     const xAxis = d3.axisBottom(xScale).tickFormat(d3.timeFormat("%Y"));
     const yAxis = d3.axisLeft(yScale);
@@ -60,7 +61,7 @@ d3.json(
     svg
       .append("g")
       .attr("id", "y-axis")
-      .attr("transform", "translate(" + (w - padding) + ", 0)")
+      .attr("transform", "translate(" + padding + ", 0)")
       .call(yAxis);
   })
   .catch((err) => console.log(err));
