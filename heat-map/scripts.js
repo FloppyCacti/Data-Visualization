@@ -4,8 +4,8 @@ d3.json(
   .then((data) => {
     const maxYear = d3.max(data.monthlyVariance, (d) => d.year);
     const minYear = d3.min(data.monthlyVariance, (d) => d.year);
-    const w = 1400;
-    const h = 800;
+    const w = 1600;
+    const h = 500;
     const padding = 60;
     const base = data.baseTemperature;
 
