@@ -81,6 +81,9 @@ d3.json(
           .style("left", `${evt.pageX}px`)
           .style("top", `${evt.pageY}px`)
           .style("visibility", "visible");
+      })
+      .on("mouseout", () => {
+        tooltip.style("visibility", "hidden");
       });
 
     // add x and y axis

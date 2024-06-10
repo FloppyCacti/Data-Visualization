@@ -9,7 +9,7 @@ svg {
 #tooltip {
   background: lightcyan;
   position: absolute;
-  width: 120px;
+  width: auto;
   border-radius: 5px;
   padding: 5px;
   font: 12px;
