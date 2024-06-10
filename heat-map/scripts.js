@@ -57,7 +57,7 @@ d3.json(
 
     // add x and y axis
     const xAxis = d3.axisBottom(xScale).tickFormat(d3.timeFormat("%Y"));
-    const yAxis = d3.axisLeft(yScale);
+    const yAxis = d3.axisLeft(yScale).tickFormat(d3.timeFormat("%B"));
 
     svg
       .append("g")
