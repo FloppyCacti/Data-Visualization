@@ -3,9 +3,9 @@ const countyURL =
 const educationURL =
   "https://cdn.freecodecamp.org/testable-projects-fcc/data/choropleth_map/for_user_education.json";
 
-let svg = d3.select("#map");
+const svg = d3.select("#map").attr("width", 1000).attr("height", 600);
 let countyData;
-let educatoinData;
+let educationData;
 
 d3.json(countyURL).then((data, error) => {
   if (error) {
@@ -18,8 +18,8 @@ d3.json(countyURL).then((data, error) => {
       if (error) {
         console.log(error);
       } else {
-        educatoinData = data;
-        console.log(educatoinData);
+        educationData = data;
+        console.log(educationData);
 
         svg
           .selectAll("path")
@@ -27,7 +27,24 @@ d3.json(countyURL).then((data, error) => {
           .enter()
           .append("path")
           .attr("d", d3.geoPath())
-          .attr("class", "county");
+          .attr("class", "county")
+          .attr("fill", (d) => {
+            let id = d.id;
+            let county = educationData.find((item) => {
+              return item.fips === id;
+            });
+
+            let percent = county.bachelorsOrHigher;
+            if (percent <= 20) {
+              return "#c7e9c0";
+            } else if (percent <= 30) {
+              return "#a1d99b";
+            } else if (percent <= 45) {
+              return "#74c476";
+            } else {
+              return "seagreen";
+            }
+          });
       }
     });
   }
