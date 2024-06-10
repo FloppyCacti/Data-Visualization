@@ -48,7 +48,7 @@ d3.json(countyURL).then((data, error) => {
             }
           })
           .attr("data-fips", (d) => {
-            d.id;
+            return d.id;
           })
           .attr("data-education", (d) => {
             let id = d.id;
