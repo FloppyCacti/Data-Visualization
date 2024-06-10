@@ -44,6 +44,17 @@ d3.json(countyURL).then((data, error) => {
             } else {
               return "seagreen";
             }
+          })
+          .attr("data-fips", (d) => {
+            d.id;
+          })
+          .attr("data-education", (d) => {
+            let id = d.id;
+            let county = educationData.find((item) => {
+              return item.fips === id;
+            });
+
+            return county.bachelorsOrHigher;
           });
       }
     });
