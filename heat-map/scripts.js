@@ -78,6 +78,7 @@ d3.json(
         }&#8451; <br/>${d.variance}&#8451;`;
         tooltip
           .html(text)
+          .attr("data-year", d.year)
           .style("left", `${evt.pageX}px`)
           .style("top", `${evt.pageY}px`)
           .style("visibility", "visible");
