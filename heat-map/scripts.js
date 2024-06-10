@@ -10,6 +10,7 @@ d3.json(
     const base = data.baseTemperature;
 
     const svg = d3.select("body").append("svg").attr("width", w).attr("height", h);
+    const tooltip = d3.select("#tooltip");
 
     const parseYear = d3.timeParse("%Y");
     const xScale = d3
@@ -55,7 +56,32 @@ d3.json(
       .attr("height", (h - 2 * padding) / 12)
       .attr("y", (d) => yScale(new Date(0, d.month - 1, 0, 0, 0, 0, 0)))
       .attr("width", (w - 2 * padding) / (maxYear - minYear))
-      .attr("x", (d) => xScale(new Date(d.year, 0, 0, 0, 0, 0, 0)));
+      .attr("x", (d) => xScale(new Date(d.year, 0, 0, 0, 0, 0, 0)))
+      .on("mouseover", (evt, d) => {
+        const [mx, my] = d3.pointer(evt);
+        const months = [
+          "Jan",
+          "Feb",
+          "Mar",
+          "Apr",
+          "May",
+          "June",
+          "July",
+          "Aug",
+          "Sep",
+          "Oct",
+          "Nov",
+          "Dec",
+        ];
+        const text = `${d.year} - ${months[d.month - 1]} <br/>${
+          Math.round((base + d.variance) * 10) / 10
+        }&#8451; <br/>${d.variance}&#8451;`;
+        tooltip
+          .html(text)
+          .style("left", `${evt.pageX}px`)
+          .style("top", `${evt.pageY}px`)
+          .style("visibility", "visible");
+      });
 
     // add x and y axis
     const xAxis = d3.axisBottom(xScale).tickFormat(d3.timeFormat("%Y"));
