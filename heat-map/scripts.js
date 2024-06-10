@@ -37,7 +37,7 @@ d3.json(
         if (base + d.variance <= 3.9) {
           return "blue";
         } else if (base + d.variance <= 5) {
-          return "lightblue";
+          return "steelblue";
         } else if (base + d.variance <= 6.1) {
           return "lightskyblue";
         } else if (base + d.variance <= 7.2) {
@@ -45,9 +45,11 @@ d3.json(
         } else if (base + d.variance <= 8.3) {
           return "lightyellow";
         } else if (base + d.variance <= 9.5) {
+          return "lightsalmon";
+        } else if (base + d.variance <= 10.6) {
           return "tomato";
         } else {
-          return "firebrick";
+          return "red";
         }
       })
       .attr("height", (h - 2 * padding) / 12)
