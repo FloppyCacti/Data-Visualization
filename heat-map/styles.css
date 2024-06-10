@@ -5,3 +5,14 @@
 svg {
   background-color: lightgreen;
 }
+
+#tooltip {
+  background: lightcyan;
+  position: absolute;
+  width: 120px;
+  border-radius: 5px;
+  padding: 5px;
+  font: 12px;
+  pointer-events: none;
+  visibility: hidden;
+}
