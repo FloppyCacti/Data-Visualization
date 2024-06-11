@@ -30,10 +30,6 @@ fetch(videoGamesURL)
       .data(root.leaves())
       .enter()
       .append("rect")
-      .attr("x", (d) => d.x0)
-      .attr("y", (d) => d.y1)
-      .attr("width", (d) => d.x1 - d.x0)
-      .attr("height", (d) => d.y1 - d.y0)
       .style("stroke", "black")
       .style("fill", (d) => {
         const dataColors = [
@@ -81,6 +77,17 @@ fetch(videoGamesURL)
 
         const index = dataCategory.indexOf(category);
         return index >= 0 ? dataColors[index] : "#000000";
+      })
+      .attr("data-name", (d) => d.data.name)
+      .attr("data-category", (d) => d.data.category)
+      .attr("data-value", (d) => d.data.value)
+      .attr("x", (d) => d.x0)
+      .attr("y", (d) => d.y0)
+      .attr("width", (d) => {
+        return d.x1 - d.x0;
+      })
+      .attr("height", (d) => {
+        return d.y1 - d.y0;
       });
 
     svg
