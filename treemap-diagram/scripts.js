@@ -19,6 +19,7 @@ fetch(videoGamesURL)
       .attr("transform", `translate(${margin.left}, ${margin.top})`);
 
     const legend = d3.select("#legend").attr("width", 400).attr("height", 300).append("g");
+    const tooltip = d3.select("#tooltip");
 
     const root = d3
       .hierarchy(data, (node) => node.children)
@@ -91,7 +92,18 @@ fetch(videoGamesURL)
       .attr("height", (d) => {
         return d.y1 - d.y0;
       })
-      .attr("class", "tile");
+      .attr("class", "tile")
+      .on("mouseover", (evt, d) => {
+        const [mx, my] = d3.pointer(evt);
+        const text = `Name: ${d.data.name}</br>Category: ${d.data.category}</br>Value: ${d.data.value}`;
+        tooltip
+          .html(text)
+          .attr("data-value", d.data.value)
+          .style("left", `${evt.pageX}px`)
+          .style("top", `${evt.pageY}px`)
+          .style("visibility", "visible");
+      })
+      .on("mouseout", () => tooltip.style("visibility", "hidden"));
 
     svg
       .selectAll("text")

@@ -9,3 +9,14 @@ body {
 svg {
   background-color: aliceblue;
 }
+
+#tooltip {
+  text-align: left;
+  position: absolute;
+  background: lightskyblue; /* Set the background color here */
+  border-radius: 5px;
+  padding: 5px;
+  font-size: 15px;
+  pointer-events: none;
+  visibility: hidden;
+}
