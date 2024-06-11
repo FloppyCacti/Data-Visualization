@@ -88,7 +88,8 @@ fetch(videoGamesURL)
       })
       .attr("height", (d) => {
         return d.y1 - d.y0;
-      });
+      })
+      .attr("class", "tile");
 
     svg
       .selectAll("text")
